@@ -2,6 +2,7 @@
 #define I8080_MAIN_I8080_H
 
 #include "Utils.h"
+#include "Instructions.h"
 
 ///////////////////////////////////////////////
 /// DEFINE MEMORY SIZE
@@ -52,9 +53,9 @@ typedef struct State{
 } State;
 
 ///////////////////////////////////////////////
-/// Main - i8080 PROCESSOR
+/// i8080 - i8080 PROCESSOR
 ///////////////////////////////////////////////
-typedef struct Main{
+typedef struct i8080{
     uint8_t (*read_byte) (void*, uint16_t);
     void (*write_byte) (void*, uint16_t, uint8_t);
 
@@ -68,11 +69,8 @@ typedef struct Main{
 } i8080;
 
 
-void initialise(struct Main* cpu);
-void execute_instruction(struct Main* cpu);
-void interrupt(struct Main* cpu);
-
-
-
+void initialise(struct i8080* cpu);
+void execute_instruction(struct i8080* cpu);
+void interrupt(struct i8080* cpu, uint8_t opcode);
 
 #endif //I8080_MAIN_I8080_H

@@ -1,10 +1,16 @@
 #include "Main - i8080.h"
 
+#define SET_FLAGS(cpu, value) do{       \
+    cpu->flags.Zero == 0;               \
+    cpu->flags.Sign >>7                 \
+    cpu->flags.Parity = parity(value)   \
+} while(0)
+
 /**
- * Initialisation function of the CPU Main - i8080
- * @param cpu struct with all the elements of the Main - i8080
+ * Initialisation function of the CPU i8080 - i8080
+ * @param cpu struct with all the elements of the i8080 - i8080
  */
-void initialise(struct Main* cpu){
+void initialise(struct i8080* cpu){
     // Setup registers
     cpu->reg.A  = 0;
     cpu->reg.B  = 0;
@@ -25,15 +31,15 @@ void initialise(struct Main* cpu){
     cpu->flags.Auxiliary_Carry    = 0;
     cpu->flags.InterruptFlip_Flop = 0;
 }
-
-static inline void execute(struct Main* cpu, uint8_t Opcode){
+//TODO
+static inline void execute(struct i8080* cpu, uint8_t Opcode){
     //TODO
 }
 /**
  * Executing one instruction
  * @param cpu, if interrupt pending and InterruptFlip_Flop is set -> execute vector of user
  */
-void execute_instruction(struct Main* cpu){
+void execute_instruction(struct i8080* cpu){
     if (cpu->flags.InterruptFlip_Flop && cpu->state.interrupt_pending && cpu->state.interrupt_delay == 0) {
         cpu->state.interrupt_pending = 0;
         cpu->flags.InterruptFlip_Flop = 0;
@@ -47,6 +53,10 @@ void execute_instruction(struct Main* cpu){
 
 }
 
+void interrupt(struct i8080* cpu, uint8_t opcode){
+    cpu->state.interrupt_pending = 1;
+    cpu->state.interrupt_vector = opcode;
+}
 ///////////////////////////////////////////////
 /// OPENING AND READING AN ASSEMBLY PROGRAM
 ///////////////////////////////////////////////
